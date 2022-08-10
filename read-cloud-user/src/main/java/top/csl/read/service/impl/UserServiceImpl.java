@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.BitFieldSubCommands;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import top.csl.read.common.pojo.account.User;
@@ -18,8 +19,12 @@ import top.csl.read.utils.UserUtil;
 import top.csl.read.vo.AuthVO;
 import top.csl.read.vo.UserVO;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -107,12 +112,55 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public Result sign(Integer userId) {
-        return null;
+        int dayOfMonth = LocalDateTime.now().getDayOfMonth();
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMM");
+        Date date = new Date();
+        String dateStr = dateFormat.format(date);
+        String key = "sign:"+userId+":"+dateStr;
+        redisTemplate.opsForValue().setBit(key,dayOfMonth - 1,true);
+        return ResultUtil.success();
     }
 
     @Override
     public Result signdays(Integer userId) {
-        return null;
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMM");
+        Date date = new Date();
+        String dateStr = dateFormat.format(date);
+        String key = "sign:"+userId+":"+dateStr;
+        int dayOfMonth = LocalDateTime.now().getDayOfMonth();
+        List<Long> res = redisTemplate.opsForValue().bitField(key,
+                BitFieldSubCommands.create().
+                        get(BitFieldSubCommands.BitFieldType.unsigned(dayOfMonth)).valueAt(0));
+        if (res == null || res.isEmpty()) {
+            return ResultUtil.success(0);
+        }
+        Long result = res.get(0);
+        if (result == null || result == 0) {
+            return ResultUtil.success(0);
+        }
+        int signdays = 0;
+        //第一种方法
+//        char[] chars = Integer.toBinaryString(result.intValue()).toCharArray();
+//        int i = chars.length;
+//        while (i > 0){
+//            if (chars[i-1] == '1') {
+//                signdays++;
+//            }else {
+//                break;
+//            }
+//            i--;
+//        }
+        //第二种方法 result & 1得到最后一个bit位
+        while (true){
+            if ((result & 1) == 1){
+                signdays++;
+            }else
+            {
+                break;
+            }
+            result >>>= 1;
+        }
+        return ResultUtil.success(signdays);
     }
 
     /**
