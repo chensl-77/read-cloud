@@ -1,0 +1,12 @@
+spring:
+  profiles:
+    active: dev
+#端口暴漏
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+
+

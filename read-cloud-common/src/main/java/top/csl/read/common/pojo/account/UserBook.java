@@ -1,0 +1,44 @@
+package top.csl.read.common.pojo.account;
+
+import lombok.Data;
+
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * 用户书架
+ * @Author: csl
+ * @DateTime: 2022/8/10 8:47
+ **/
+@Data
+public class UserBook implements Serializable {
+
+    private static final Long serialVersionUID = 1L;
+
+    private Integer id;
+
+    /**
+     * 用户
+     */
+    private Integer userId;
+
+    /**
+     * 图书id
+     */
+    private String bookId;
+
+    /**
+     * 图书最后章节id
+     */
+    private Integer lastChapterId;
+
+    /**
+     * 最后阅读时间
+     */
+    private Long lastReadTime;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+}
