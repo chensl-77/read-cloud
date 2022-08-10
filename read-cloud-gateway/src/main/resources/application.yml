@@ -1,0 +1,77 @@
+spring:
+  profiles:
+    active: dev
+#端口暴漏
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+
+#server:
+#  port: 8010
+#
+#spring:
+#  application:
+#    # 服务逻辑名称
+#    name: read-cloud-gateway
+#  cloud:
+#    gateway:
+#      discovery:
+#        locator:
+#          enabled: true
+#          lowerCaseServiceId: true
+#      routes:
+#        - id: book-rpc
+#          uri: lb://read-cloud-book
+#          predicates:
+#            - Path=/book/**
+#            - Method=GET
+#          filters:
+#            # 降级配置
+#            - name: Hystrix
+#              args:
+#                name: fallbackcmd
+#                fallbackUri: forward:/fallback
+#            # 限流配置
+#            - name: RequestRateLimiter
+#              args:
+#                redis-rate-limiter.replenishRate: 3 # 每秒允许处理的请求数量
+#                redis-rate-limiter.burstCapacity: 5 # 每秒最大处理的请求数量
+#                key-resolver: "#{@ipKeyResolver}" # 限流策略，对应策略的Bean
+#
+#
+#        - id: homepage-rpc
+#          uri: lb://read-cloud-homepage
+#          predicates:
+#            - Path=/index/**
+#          filters:
+#            # 降级配置
+#            - name: Hystrix
+#              args:
+#                name: fallbackcmd
+#                fallbackUri: forward:/fallback
+#            # 限流配置
+#            - name: RequestRateLimiter
+#              args:
+#                redis-rate-limiter.replenishRate: 3
+#                redis-rate-limiter.burstCapacity: 5
+#                key-resolver: "#{@ipKeyResolver}"
+
+        - id: user-rpc
+          uri: lb://read-cloud-user
+          predicates:
+            - Path=/account/**
+          filters:
+            # 降级配置
+            - name: Hystrix
+              args:
+                name: fallbackcmd
+                fallbackUri: forward:/fallback
+            # 限流配置
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 3
+                redis-rate-limiter.burstCapacity: 5
+                key-resolver: "#{@ipKeyResolver}"

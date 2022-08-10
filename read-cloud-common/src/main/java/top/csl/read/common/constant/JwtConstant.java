@@ -6,7 +6,7 @@ package top.csl.read.common.constant;
  **/
 public class JwtConstant {
     /** JWT秘钥 */
-    public final static String SECRET_KEY = "someday";
+    public final static String SECRET_KEY = "EventLog";
 
     /** 过期时间天数 */
     public final static int EXPIRE_DAY = 7;
