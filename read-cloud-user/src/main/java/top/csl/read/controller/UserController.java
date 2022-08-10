@@ -1,16 +1,12 @@
 package top.csl.read.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import top.csl.read.common.result.Result;
 import top.csl.read.param.UserParam;
 import top.csl.read.service.UserService;
+import top.csl.read.vo.AuthVO;
 
 /**
  * @Author: csl
@@ -31,4 +27,37 @@ public class UserController {
         return this.userService.register(userParam);
     }
 
+
+    @ApiOperation(value = "用户登录", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "query", name = "loginName", value = "登录名", required = true, dataType = "String"),
+            @ApiImplicitParam(paramType = "query", name = "password", value = "登录密码", required = true, dataType = "String")
+    })
+    @ApiResponses({@ApiResponse(code = 200, message = "", response = AuthVO.class)})
+    @PostMapping("/login")
+    public Result<AuthVO> login(@RequestBody UserParam userParam) {
+        String loginName = userParam.getLoginName();
+        String password = userParam.getUserPwd();
+        return userService.login(loginName, password);
+    }
+
+    @ApiOperation(value = "用户签到", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "userId", value = "用户ID", required = true, dataType = "int"),
+    })
+    @ApiResponses({@ApiResponse(code = 200, message = "",response = Result.class)})
+    @PostMapping("/sign")
+    public Result sign(@RequestHeader("userId") Integer userId) {
+        return this.userService.sign(userId);
+    }
+
+    @ApiOperation(value = "统计当月连续签到天数", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "userId", value = "用户ID", required = true, dataType = "int"),
+    })
+    @ApiResponses({@ApiResponse(code = 200, message = "",response = Integer.class)})
+    @PostMapping("/signdays")
+    public Result signdays(@RequestHeader("userId") Integer userId) {
+        return this.userService.signdays(userId);
+    }
 }

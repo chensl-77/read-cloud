@@ -1,9 +1,11 @@
 package top.csl.read.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import top.csl.read.common.pojo.account.User;
 import top.csl.read.common.result.Result;
@@ -11,10 +13,17 @@ import top.csl.read.common.result.ResultUtil;
 import top.csl.read.mapper.UserMapper;
 import top.csl.read.param.UserParam;
 import top.csl.read.service.UserService;
+import top.csl.read.utils.JWTUtil;
 import top.csl.read.utils.UserUtil;
 import top.csl.read.vo.AuthVO;
+import top.csl.read.vo.UserVO;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
+import static top.csl.read.common.constant.JwtConstant.EXPIRE_DAY;
 
 /**
  * @Author: csl
@@ -26,6 +35,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     @Override
     public Result register(UserParam userParam) {
@@ -51,7 +63,31 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public Result<AuthVO> login(String loginName, String password) {
-        return null;
+        try{
+            User user = this.userMapper.selectByLoginName(loginName);
+            if (null == user) {
+                return ResultUtil.notFound().buildMessage("登录失败，用户不存在！");
+            }
+
+            // 校验用户密码
+            String encryptPwd = UserUtil.getUserEncryptPassword(loginName, password);
+            if (!user.getUserPwd().equals(encryptPwd)) {
+                return ResultUtil.verificationFailed().buildMessage("登录失败，密码输入错误！");
+            }
+
+            // 登录成功，返回用户信息
+            AuthVO vo = new AuthVO();
+            UserVO userVo = new UserVO();
+            BeanUtils.copyProperties(user, userVo);
+            String token = JWTUtil.buildJwt(this.getLoginExpre(), userVo);
+            redisTemplate.opsForValue().set(token, JSON.toJSONString(userVo),30, TimeUnit.MINUTES);
+            vo.setToken(token);
+            vo.setUser(userVo);
+            return ResultUtil.success(vo);
+        } catch (Exception ex) {
+            log.error("登录失败了！{}; loginName:{}", ex, loginName);
+            return ResultUtil.fail().buildMessage("登录失败，服务器被吃了＝(#>д<)ﾉ ！请重试。 ");
+        }
     }
 
     @Override
@@ -77,5 +113,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public Result signdays(Integer userId) {
         return null;
+    }
+
+    /**
+     * 获取登陆过期时间
+     * @return
+     */
+    private Date getLoginExpre(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, EXPIRE_DAY);
+        return calendar.getTime();
     }
 }
