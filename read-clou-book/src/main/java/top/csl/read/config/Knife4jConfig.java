@@ -36,8 +36,8 @@ public class Knife4jConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("用户中心文档")
-                .description("用户中心")
+                .title("图书中心文档")
+                .description("图书中心")
                 .contact(new Contact("csl", "https://github.com/chensl-77", "2018324395@qq.com"))
                 .termsOfServiceUrl("https://www.read.com/user/api")
                 .version("1.0")
