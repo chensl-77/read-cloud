@@ -114,7 +114,7 @@ public class AuthFilter implements GlobalFilter, Ordered {
     }
 
 
-    public User validationToken(String token) {
+    public  User validationToken(String token) {
         if (token == null) {
             return null;
         }
@@ -132,5 +132,14 @@ public class AuthFilter implements GlobalFilter, Ordered {
         }
         User user = JSON.parseObject(redisRes, User.class);
         return user;
+    }
+
+    public static void main(String[] args) {
+        //解析JWT字符串中的数据，并进行最基础的验证
+        Claims claims = Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws("eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NjA3ODE5MDUsImxvZ2luTmFtZSI6ImNzbCIsIm5pY2tOYW1lIjoiY3NsIiwiaGVhZEltZ1VybCI6Imh0dHA6Ly9yZWFkaW5nLnplYWxvbi5jbi9kZWZhdWx0LmpwZyIsInV1aWQiOiJhY2NiNWMwMjIzMDI0OTA5OGNmYTU0N2MzMTU3Y2RiYyIsImlkIjoyNH0.YP1uPQk69JcYtzaVKtW_si83EB2EIdBNsCoHwTcd5E8")
+                .getBody();
+        System.out.println(claims);
     }
 }

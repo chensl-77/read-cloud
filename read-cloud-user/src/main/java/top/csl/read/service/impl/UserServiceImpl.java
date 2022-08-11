@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.BitFieldSubCommands;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+
 import top.csl.read.common.pojo.account.User;
 import top.csl.read.common.result.Result;
 import top.csl.read.common.result.ResultUtil;
@@ -46,7 +47,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public Result register(UserParam userParam) {
-        User user = userMapper.selectById(userParam.getLoginName());
+        User user = userMapper.selectByLoginName(userParam.getLoginName());
         if (user != null) {
             return ResultUtil.verificationFailed().buildMessage(userParam.getLoginName() + "已存在，请使用其它登录名进行注册！");
         }
@@ -58,6 +59,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             // 设置默认头像
             user.setHeadImgUrl("http://chensl.top/img/webavatar.10e5eb5a.jpg");
             user.setUuid(UUID.randomUUID().toString().replace("-",""));
+            user.setCreateTime(new Date());
+            user.setUpdateTime(new Date());
             this.userMapper.insert(user);
         } catch (Exception ex) {
             log.error("注册用户失败了！{}; user:{}", ex, user);
@@ -85,7 +88,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             UserVO userVo = new UserVO();
             BeanUtils.copyProperties(user, userVo);
             String token = JWTUtil.buildJwt(this.getLoginExpre(), userVo);
-            redisTemplate.opsForValue().set(token, JSON.toJSONString(userVo),30, TimeUnit.MINUTES);
+            redisTemplate.opsForValue().set(token, JSON.toJSONString(userVo),7, TimeUnit.DAYS);
             vo.setToken(token);
             vo.setUser(userVo);
             return ResultUtil.success(vo);

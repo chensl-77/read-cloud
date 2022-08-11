@@ -58,20 +58,20 @@ management:
 #                redis-rate-limiter.replenishRate: 3
 #                redis-rate-limiter.burstCapacity: 5
 #                key-resolver: "#{@ipKeyResolver}"
-
-        - id: user-rpc
-          uri: lb://read-cloud-user
-          predicates:
-            - Path=/account/**
-          filters:
-            # 降级配置
-            - name: Hystrix
-              args:
-                name: fallbackcmd
-                fallbackUri: forward:/fallback
-            # 限流配置
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter.replenishRate: 3
-                redis-rate-limiter.burstCapacity: 5
-                key-resolver: "#{@ipKeyResolver}"
+#
+#        - id: user-rpc
+#          uri: lb://read-cloud-user
+#          predicates:
+#            - Path=/account/**
+#          filters:
+#            # 降级配置
+#            - name: Hystrix
+#              args:
+#                name: fallbackcmd
+#                fallbackUri: forward:/fallback
+#            # 限流配置
+#            - name: RequestRateLimiter
+#              args:
+#                redis-rate-limiter.replenishRate: 3
+#                redis-rate-limiter.burstCapacity: 5
+#                key-resolver: "#{@ipKeyResolver}"

@@ -17,15 +17,11 @@ public class UserUtil {
      * @param
      * @return
      */
-    public static String getSalt(String loginName){
-        char[] chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=,./<>?".toCharArray();
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < 6; i++) {
-            char aChar = chars[new Random().nextInt(chars.length)];
-            stringBuilder.append(aChar);
-        }
-        stringBuilder.append(loginName);
-        return stringBuilder.toString();
+    public static String getSalt(String loginName) {
+        String[] salts = {"sun","moon","star","sky","cloud","fog","rain","wind","rainbow"};
+        int hashCode = loginName.hashCode() + 159;
+        int mod = Math.abs( hashCode % 9 );
+        return salts[mod];
     }
 
     /**
@@ -41,10 +37,9 @@ public class UserUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(getSalt("admin"));
-        String admin = getUserEncryptPassword("admin", "111");
+        System.out.println(getSalt("csl"));
+        String admin = getUserEncryptPassword("csl", "csl");
         System.out.println(admin);
-        System.out.println(UUID.randomUUID().toString().replace("-", ""));
     }
 }
 

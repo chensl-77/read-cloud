@@ -1,5 +1,7 @@
 package top.csl.read.common.pojo.book;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -8,6 +10,7 @@ import java.util.Date;
  * @Author: csl
  * @DateTime: 2022/8/10 8:52
  **/
+@Data
 public class Book implements Serializable {
 
     private static final Long serialVersionUID = 1L;
