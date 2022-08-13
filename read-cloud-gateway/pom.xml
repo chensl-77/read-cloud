@@ -41,10 +41,10 @@
             <version>0.9.0.RELEASE</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis-reactive</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-data-redis-reactive</artifactId>-->
+<!--        </dependency>-->
 
         <!--JWT-->
         <dependency>
@@ -53,11 +53,7 @@
             <version>0.9.1</version>
         </dependency>
 
-        <!-- redis -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
+
 
         <!-- 公用包 -->
         <dependency>

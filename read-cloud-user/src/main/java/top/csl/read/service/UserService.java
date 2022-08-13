@@ -61,5 +61,13 @@ public interface UserService extends IService<User> {
      * @return
      */
     Result signdays(Integer userId);
+
+    /**
+     * 每日一书
+     * @param userId
+     * @param bookId
+     * @return
+     */
+    Result daybook(Integer userId, String bookId);
 }
 

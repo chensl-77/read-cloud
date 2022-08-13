@@ -8,6 +8,7 @@
         <module>read-cloud-user</module>
         <module>read-cloud-gateway</module>
         <module>read-clou-book</module>
+        <module>read-cloud-rabbitmq</module>
     </modules>
 
     <parent>
@@ -67,6 +68,39 @@
             <scope>runtime</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring-data-redis</artifactId>
+                    <groupId>org.springframework.data</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>lettuce-core</artifactId>
+                    <groupId>io.lettuce</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+            <version>2.6.2</version>
+        </dependency>
+
+        <!--redisson-->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
+            <version>3.13.6</version>
+        </dependency>
+
+        <!--工具类 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.6.3</version>
+        </dependency>
 
         <!-- mybatis分页插件 -->
         <dependency>
@@ -86,6 +120,7 @@
             <artifactId>druid</artifactId>
             <version>${druid.version}</version>
         </dependency>
+
     </dependencies>
 
     <dependencyManagement>

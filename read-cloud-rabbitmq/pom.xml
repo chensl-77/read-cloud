@@ -9,7 +9,11 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>read-clou-book</artifactId>
+    <artifactId>read-cloud-rabbitmq</artifactId>
+
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
 
     <dependencies>
         <!-- Spring-MVC -->
@@ -18,18 +22,13 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.mybatis.spring.boot</groupId>-->
-<!--            <artifactId>mybatis-spring-boot-starter</artifactId>-->
-<!--            <version>2.0.0</version>-->
-<!--        </dependency>-->
-
         <!-- 配置中心 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
             <version>0.9.0.RELEASE</version>
         </dependency>
+
 
         <!-- 注册中心 -->
         <dependency>
@@ -73,23 +72,28 @@
         </dependency>
 
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
 
         <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.4.3</version>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
         </dependency>
 
 
-        <!-- 公用包 -->
+        <!--        redis-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>top.csl</groupId>
             <artifactId>read-cloud-common</artifactId>
             <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-redis</artifactId>
         </dependency>
     </dependencies>
 
@@ -98,22 +102,13 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <!-- 编译插件，指定JDK版本 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <testFailureIgnore>true</testFailureIgnore>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
                 </configuration>
             </plugin>
         </plugins>

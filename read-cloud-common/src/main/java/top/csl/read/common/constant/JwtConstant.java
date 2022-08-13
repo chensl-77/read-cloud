@@ -10,4 +10,7 @@ public class JwtConstant {
 
     /** 过期时间天数 */
     public final static int EXPIRE_DAY = 7;
+
+    /** 每日一书库存 */
+    public final static int STOCK_COUNTS = 10;
 }

@@ -59,13 +59,16 @@ public class UserController {
         return this.userService.signdays(userId);
     }
 
-    @Autowired
-    @Lazy
-    private BookService bookService;
-
-    @GetMapping("get")
-    public Result get() {
-        return bookService.getBookById("60034881");
+    @ApiOperation(value = "每日一书", httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "userId", value = "用户ID", required = true, dataType = "int"),
+            @ApiImplicitParam(paramType = "query", name = "bookId", value = "图书ID", dataType = "String")
+    })
+    @ApiResponses({@ApiResponse(code = 200, message = "", response = Integer.class)})
+    @PostMapping("/daybook")
+    public Result daybook(@RequestHeader("userId") Integer userId,String bookId) {
+        return this.userService.daybook(userId,bookId);
     }
+
 }
 
