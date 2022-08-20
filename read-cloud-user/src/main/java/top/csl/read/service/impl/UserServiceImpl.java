@@ -19,7 +19,6 @@ import top.csl.read.common.result.Result;
 import top.csl.read.common.result.ResultUtil;
 import top.csl.read.common.utils.DateUtil;
 import top.csl.read.common.utils.RedisUtil;
-import top.csl.read.config.RabbitMQConfig;
 import top.csl.read.mapper.UserMapper;
 import top.csl.read.param.UserParam;
 import top.csl.read.service.UserService;
@@ -195,7 +194,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public Result daybook(Integer userId, String bookId) {
         try {
             String dateStr = dateUtil.dateFormatA();
-            String key = "dayBook" + ":" + dateStr + ":";
+            String key = "dayBook" + ":" + dateStr;
             boolean success = redisUtil.isExistKey(key);
             if (success) {
                 return ResultUtil.custom(201, "今天的每日一书已经发布了");
@@ -214,7 +213,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     public void taskSign(Integer userId){
         String dayStr = dateUtil.dateFormatA();
-        executorService.submit(() -> {
+//        executorService.submit(() -> {
             // 1.执行lua脚本
             Long result = redisTemplate.execute(
                     SECKILL_SCRIPT,
@@ -224,9 +223,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             int r = result.intValue();
             if (r == 0){
                 Map<String, Object> map = getMap(userId);
-                rabbitTemplate.convertAndSend(RabbitMQConstant.TOPIC_EXCHANGE_NAME,"sign", map);
+                rabbitTemplate.convertAndSend(RabbitMQConstant.TOPIC_EXCHANGE_NAME,"sign.csl", map);
             }
-        },"taskSign");
+//        });
     }
 
     /**

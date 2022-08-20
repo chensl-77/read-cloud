@@ -19,38 +19,7 @@
       update_time
     </sql>
 
-    <insert id="insert" parameterType="top.csl.read.common.pojo.account.User">
-      insert into user (id, uuid, user_pwd,
-        login_name, nick_name, phone_number,
-        head_img_url, create_time, update_time
-        )
-      values (#{id,jdbcType=INTEGER}, #{uuid,jdbcType=VARCHAR}, #{userPwd,jdbcType=VARCHAR},
-        #{loginName,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR},
-        #{headImgUrl,jdbcType=VARCHAR}, now(), now()
-        )
-    </insert>
 
-    <update id="updateByLoginName" parameterType="top.csl.read.common.pojo.account.User">
-        update user
-        <set>
-            <if test="userPwd != null">
-                user_pwd = #{userPwd,jdbcType=VARCHAR},
-            </if>
-            <if test="nickName != null">
-                nick_name = #{nickName,jdbcType=VARCHAR},
-            </if>
-            <if test="phoneNumber != null">
-                phone_number = #{phoneNumber,jdbcType=VARCHAR},
-            </if>
-            <if test="headImgUrl != null">
-                head_img_url = #{headImgUrl,jdbcType=VARCHAR},
-            </if>
-            <if test="updateTime != null">
-                update_time = #{updateTime,jdbcType=TIMESTAMP},
-            </if>
-        </set>
-        where login_name = #{loginName,jdbcType=VARCHAR}
-    </update>
 
     <select id="selectByLoginName" parameterType="java.lang.String" resultMap="BaseResultMap">
         select

@@ -2,9 +2,9 @@ package top.csl.read.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import top.csl.read.common.pojo.book.DayBook;
+import top.csl.read.common.pojo.book.DayUser;
 import top.csl.read.common.result.Result;
 
 /**
@@ -15,7 +15,7 @@ import top.csl.read.common.result.Result;
 @FeignClient(value = "read-cloud-book")
 public interface BookService {
 
-    @RequestMapping("/book/savedayuser")
-    Result savedayuser(@RequestBody Integer userId);
+    @PostMapping("/book/savedayuser")
+    Result<DayUser> savedayuser(@RequestParam("userId") Integer userId);
 
 }

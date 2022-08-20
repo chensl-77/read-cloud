@@ -1,9 +1,12 @@
 package top.csl.read.controller;
 
 import io.swagger.annotations.*;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import top.csl.read.common.pojo.book.Book;
+import top.csl.read.common.pojo.book.DayBook;
+import top.csl.read.common.pojo.book.DayUser;
 import top.csl.read.common.result.Result;
 import top.csl.read.service.DayUserService;
 
@@ -23,8 +26,8 @@ public class DayUserController {
             @ApiImplicitParam(paramType = "query", name = "userId", value = "用户ID", required = true, dataType = "int"),
     })
     @ApiResponses({@ApiResponse(code = 200, message = "", response = Book.class)})
-    @GetMapping("/savedayuser")
-    public Result savedayuser(@RequestBody Integer userId){
+    @PostMapping("/savedayuser")
+    public Result<DayUser> savedayuser(@RequestParam Integer userId){
         return dayUserService.savedayuser(userId);
     }
 }

@@ -1,12 +1,14 @@
 package top.csl.read.common.utils;
 
 import cn.hutool.core.util.BooleanUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -21,12 +23,13 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class RedisUtil {
 
-    private  StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     /**
-     * 当前时间距离第二天凌晨的秒数
+     * 当前时间距离第二天凌晨的毫秒数
      *
-     * @return 返回值单位为[s:秒]
+     * @return 返回值单位为[ms:毫秒]
      */
     public  Long getSecondsNextEarlyMorning() {
         Calendar cal = Calendar.getInstance();
@@ -109,8 +112,8 @@ public class RedisUtil {
      * @param key
      * @param value
      */
-    public void setKey(String key,String value,Long endOfDay) {
-        stringRedisTemplate.opsForValue().set(key,value,endOfDay);
+    public void setKey(String key,String value,Long ex) {
+        stringRedisTemplate.opsForValue().set(key,value, Duration.ofMillis(ex));
     }
 
     /**

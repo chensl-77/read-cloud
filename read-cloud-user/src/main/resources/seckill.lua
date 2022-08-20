@@ -6,9 +6,9 @@ local userId = ARGV[2]
 
 -- 2.数据key
 -- 2.1.库存key
-local stockKey = 'daybook:stock:' .. createDay
+local stockKey = 'dayBook:stock:' .. createDay
 -- 2.2.dayuserkey
-local orderKey = 'dayuser:order:' .. createDay
+local orderKey = 'dayUser:order:' .. createDay
 
 -- 3.脚本业务
 -- 3.1.判断库存是否充足 get stockKey

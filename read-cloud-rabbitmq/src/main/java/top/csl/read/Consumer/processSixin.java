@@ -1,6 +1,7 @@
 package top.csl.read.Consumer;
 
 import com.rabbitmq.client.Channel;
+import io.swagger.models.auth.In;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;

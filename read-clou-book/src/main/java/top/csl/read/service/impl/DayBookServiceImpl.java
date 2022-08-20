@@ -36,14 +36,16 @@ public class DayBookServiceImpl extends ServiceImpl<DayBookMapper,DayBook> imple
     @Transactional
     public Result<Book> saveBook(String bookId) {
         String dateStr = dateUtil.dateFormatA();
-        String key = "dayBook:stock" + dateStr;
-        redisUtil.setKey(key,"1",redisUtil.getSecondsNextEarlyMorning());
+        String key = "dayBook:stock:" + dateStr;
+        String key1 = "dayBook:" + dateStr;
+        redisUtil.setKey(key1,"1",redisUtil.getSecondsNextEarlyMorning());
+        redisUtil.setKey("abc","2",redisUtil.getSecondsNextEarlyMorning());
         redisUtil.incr(key,STOCK_COUNTS);
         DayBook dayBook = new DayBook();
         dayBook.setBookId(bookId);
         dayBook.setStock(10);
         dayBook.setCreateDay(dateStr);
-        dayBookMapper.insert(dayBook);
+        this.save(dayBook);
         return ResultUtil.success("发布成功");
     }
 

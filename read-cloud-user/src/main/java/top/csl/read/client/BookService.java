@@ -19,5 +19,5 @@ public interface BookService {
     Result<Book> getBookById(@RequestParam("bookId") String bookId);
 
     @RequestMapping("/book/publishdaybook")
-    Result<Book> publishdaybook(@RequestParam("bookId") String bookId);
+    Result publishdaybook(@RequestParam("bookId") String bookId);
 }

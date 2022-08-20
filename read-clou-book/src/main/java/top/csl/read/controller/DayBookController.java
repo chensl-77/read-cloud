@@ -4,6 +4,7 @@ import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import top.csl.read.common.pojo.book.Book;
 import top.csl.read.common.result.Result;
@@ -27,7 +28,7 @@ public class DayBookController {
     })
     @ApiResponses({@ApiResponse(code = 200, message = "", response = Book.class)})
     @GetMapping("/publishdaybook")
-    public Result<Book> getBookById(String bookId){
+    public Result getBookById(@RequestParam String bookId){
         return dayBookService.saveBook(bookId);
     }
 

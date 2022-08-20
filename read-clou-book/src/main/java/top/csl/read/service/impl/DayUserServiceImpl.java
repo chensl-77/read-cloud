@@ -34,7 +34,7 @@ public class DayUserServiceImpl extends ServiceImpl<DayUserMapper, DayUser> impl
 
     @Override
     @Transactional
-    public Result savedayuser(Integer userId) {
+    public Result<DayUser> savedayuser(Integer userId) {
         String bookId = dayBookService.getNowBookId();
         String dayStr = dateUtil.dateFormatA();
         LambdaQueryWrapper<DayUser> lqw = new LambdaQueryWrapper<>();
@@ -63,6 +63,6 @@ public class DayUserServiceImpl extends ServiceImpl<DayUserMapper, DayUser> impl
         dayUser.setCreateDay(dayStr);
         dayUser.setUserId(userId);
         save(dayUser);
-        return ResultUtil.custom(200,"领取成功");
+        return ResultUtil.success(dayUser);
     }
 }
